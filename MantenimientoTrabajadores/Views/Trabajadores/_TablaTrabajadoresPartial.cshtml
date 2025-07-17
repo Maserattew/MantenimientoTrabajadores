@@ -1,0 +1,103 @@
+﻿@model List<MantenimientoTrabajadores.Models.Trabajador>
+
+@Html.Raw(@"
+<style>
+    @keyframes fadeInRow {
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in {
+        animation: fadeInRow 0.3s ease-in-out;
+    }
+
+    .badge-masculino {
+        background-color: #0d6efd;
+    }
+
+    .badge-femenino {
+        background-color: #fd7e14;
+    }
+
+    .table thead {
+        background: linear-gradient(to right, #343a40, #495057);
+        color: white;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+
+    .btn-action {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-action i {
+        font-size: 1rem;
+    }
+
+    .nombres-col {
+        text-align: left;
+        font-weight: 500;
+    }
+</style>
+")
+
+
+<div class="table-responsive rounded shadow-sm mt-4">
+    <table class="table table-hover table-bordered align-middle text-center">
+        <thead>
+            <tr>
+                <th>Tipo Doc</th>
+                <th>Número</th>
+                <th>Nombres</th>
+                <th>Sexo</th>
+                <th>Departamento</th>
+                <th>Provincia</th>
+                <th>Distrito</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model)
+            {
+                var rowClass = t.Sexo == "M" ? "table-primary" : "table-warning";
+                var sexoBadge = t.Sexo == "M"
+                ? "<span class='badge badge-masculino'>Masculino</span>"
+                : "<span class='badge badge-femenino'>Femenino</span>";
+
+                <tr class="@rowClass fade-in">
+                    <td>@t.TipoDocumento</td>
+                    <td>@t.NumeroDocumento</td>
+                    <td class="nombres-col">@t.Nombres</td>
+                    <td>@Html.Raw(sexoBadge)</td>
+                    <td>@t.Departamento?.Nombre</td>
+                    <td>@t.Provincia?.Nombre</td>
+                    <td>@t.Distrito?.Nombre</td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-outline-primary btn-sm btn-action" title="Editar" onclick="abrirModalEditar(@t.Id)">
+                                <i class="bi bi-pencil-fill"></i>
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm btn-action" title="Eliminar" onclick="eliminarTrabajador(@t.Id)">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
